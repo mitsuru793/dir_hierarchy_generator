@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+require 'yaml'
+require 'thor'
+require 'awesome_print'
+require 'dir_hierarchy_generator'
+
+class Command < Thor
+  desc 'create', 'create file directory hierarchy with yaml'
+  option :path, :aliases => '-p', :type => :string
+  option :file, :aliases => '-f', :type => :string, required: true
+  def create
+    tree = YAML.load_file(options['file'])
+    Dir.chdir(options['path']) if options['path']
+    DirHierarchyGenerator.create_tree_with_content(tree)
+  end
+end
+
+
+Command.start(ARGV)
